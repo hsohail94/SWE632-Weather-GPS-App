@@ -22,16 +22,16 @@ public final class NetworkMethods
     private static final String API_KEY = "AIzaSyBVGhILjQgCPzE4R_zelzcZCiGrOJ__SFM";
 
     //URL for getting only JSON data for a particular route
-    private static final String JSON_ROUTE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json";
+    private static final String JSON_ROUTE_URL = "https://maps.googleapis.com/maps/api/directions/json";
 
     //Parameter for units; choice between metric and imperial in user preferences
     private static final String UNITS_PARAM = "units";
 
     //Paramater for source location
-    private static final String SOURCE_PARAM = "origins";
+    private static final String SOURCE_PARAM = "origin";
 
     //Parameter for destination
-    private static final String DEST_PARAM = "destinations";
+    private static final String DEST_PARAM = "destination";
 
     //By default, units are imperial, since we're building this in America. But, they can be changed to metric too.
     //A method will be written for this
