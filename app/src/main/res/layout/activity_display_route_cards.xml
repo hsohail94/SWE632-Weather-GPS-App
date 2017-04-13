@@ -34,7 +34,6 @@
                 android:layout_below="@id/distance_and_time"
                 android:textSize="15sp"/>
 
-
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
