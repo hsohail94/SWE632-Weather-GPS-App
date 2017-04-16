@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.gmu.swe632androidproject.DisplayRouteCardsActivity">
-
-    <android.support.v7.widget.CardView
+  <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/routes_cardview">
+        android:id="@+id/routes_cardview"
+        android:elevation="3dp"
+        app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,8 +19,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/distance_and_time"
                 android:fontFamily="sans-serif"
-                android:text="Route 1: 320 miles, 20 mins"
                 android:layout_alignParentTop="true"
+                android:text="route text"
+                android:textColor="@color/blackTest"
+                android:textStyle="bold"
                 android:textSize="20sp"/>
 
             <TextView
@@ -30,12 +30,22 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/average_weather"
                 android:fontFamily="sans-serif"
-                android:text="Average weather: good"
+                android:textColor="@color/blackTest"
+                android:text="this is a weather test"
                 android:layout_below="@id/distance_and_time"
                 android:textSize="15sp"/>
+
+            <!--
+            <com.github.pwittchen.weathericonview.WeatherIconView
+                xmlns:custom="http://schemas.android.com/apk/res/com.example.customviews"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_toRightOf="@id/distance_and_time"
+                android:layout_centerHorizontal="true"
+                custom:weatherIconResource="@string/wi_day_sunny_overcast"
+                custom:weatherIconColor="@android:color/black"/>-->
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>

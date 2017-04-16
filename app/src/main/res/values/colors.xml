@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="redButton">#FF0000</color>
+    <color name="blackTest">#000000</color>
 </resources>
