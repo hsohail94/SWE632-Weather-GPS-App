@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -31,10 +32,21 @@ public class MainActivity extends AppCompatActivity
         sourceText = (EditText) findViewById(R.id.source_text);
         destinationText = (EditText) findViewById(R.id.destination_text);
 
-        //Pass data to new class, and start it when button is clicked
-        Intent i = new Intent(MainActivity.this, DisplayRouteCardsActivity.class);
-        i.putExtra("source location", sourceText.getText().toString());
-        i.putExtra("destination address", destinationText.getText().toString());
-        startActivity(i);
+        String source = sourceText.getText().toString();
+        String destination = destinationText.getText().toString();
+
+        //Handling input incase either source or destination fields are empty or null
+        if (source.replaceAll("\\s+","").equals("") || destination.replaceAll("\\s+","").equals(""))
+        {
+            Toast.makeText(this, "Please enter a source, destination, or both!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            //Pass data to new class, and start it when button is clicked
+            Intent i = new Intent(MainActivity.this, DisplayRouteCardsActivity.class);
+            i.putExtra("source location", source);
+            i.putExtra("destination address", destination);
+            startActivity(i);
+        }
     }
 }

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/routes_cardview"
-        android:elevation="3dp"
+        android:elevation="10dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
@@ -23,7 +23,7 @@
                 android:text="route text"
                 android:textColor="@color/blackTest"
                 android:textStyle="bold"
-                android:textSize="20sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"

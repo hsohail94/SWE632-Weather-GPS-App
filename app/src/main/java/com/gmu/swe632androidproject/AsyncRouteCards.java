@@ -26,17 +26,21 @@ import java.util.HashMap;
 public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
 {
     //private ArrayList<NameValuePair> elementPairs;
+    private String sourceAddress;
+    private String destAddress;
     private URL jsonURL;
     private ProgressDialog progressDialog;
     private Activity context;
     private RecyclerView rv;
 
-    public AsyncRouteCards (URL jsonURL, Activity context, RecyclerView rv)
+    public AsyncRouteCards (URL jsonURL, Activity context, RecyclerView rv, String sourceAddress, String destAddress)
     {
         //this.elementPairs = elementPairs;
         this.jsonURL = jsonURL;
         this.context = context;
         this.rv = rv;
+        this.sourceAddress = sourceAddress;
+        this.destAddress = destAddress;
     }
 
     protected void onPreExecute()

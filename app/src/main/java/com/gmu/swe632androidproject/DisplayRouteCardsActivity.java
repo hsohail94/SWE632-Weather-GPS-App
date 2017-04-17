@@ -35,7 +35,7 @@ public class DisplayRouteCardsActivity extends AppCompatActivity
         mCardsRV.setHasFixedSize(true);
         mCardsRV.setVisibility(View.VISIBLE);
 
-        AsyncRouteCards asyncTask = new AsyncRouteCards(mapsJSONUrl, this, mCardsRV);
+        AsyncRouteCards asyncTask = new AsyncRouteCards(mapsJSONUrl, this, mCardsRV, userSource, userDestination);
         asyncTask.execute();
     }
 }
