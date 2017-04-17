@@ -50,11 +50,6 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
     {
         JSONObject jsonDataObject = null;
         JSONArray routesJsonArray = null;
-        //If there is no data passed, return null
-        if (params.length == 0)
-        {
-            return null;
-        }
 
         //Try getting a JSON data response from our Maps API Call
         try
@@ -65,8 +60,10 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
 
             Log.d("JSON Data returned: ", jsonDataResponse);
 
-            if (jsonDataObject.has("routes"))
+            if (jsonDataObject.has("routes")) {
                 routesJsonArray = jsonDataObject.getJSONArray("routes"); //store routes in this object
+                Log.d("Json routes returned: ", routesJsonArray.toString());
+            }
         }
         catch (IOException e)
         {
@@ -97,6 +94,13 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         }
     }
 
+    /**
+     * A method called by onPostExecute. This is what will actually take care of displaying the returned Maps results
+     * in our RecyclerView
+     *
+     * @param jsonArray
+     * @throws JSONException
+     */
     private void showJSONRoutesInRecyclerView (JSONArray jsonArray) throws JSONException
     {
         JSONArray routeResults = jsonArray; //defensive programming!
@@ -107,16 +111,16 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         {
             JSONObject resultObj = (JSONObject) routeResults.getJSONObject(i);
             HashMap<String,String> map = new HashMap<String,String>();
-
             //we only need our route legs, overall distance, and overall duration
             map.put("legs", resultObj.getJSONArray("legs").toString());
-            map.put("totalDistance", resultObj.getJSONArray("legs").getJSONObject(0).getString("distance"));
-            map.put("totalDuration", resultObj.getJSONArray("legs").getJSONObject(1).getString("duration"));
+            map.put("totalDistance", resultObj.getJSONArray("legs").getJSONObject(0).getJSONObject("distance").getString("text"));
+            map.put("totalDuration", resultObj.getJSONArray("legs").getJSONObject(0).getJSONObject("duration").getString("text"));
 
             //add data to hashmap, then log it
             jsonResultsList.add(i, map);
-            Log.d("JSON data" + i + ": ", resultObj.getString("legs") + " " + resultObj.getJSONArray("legs").getJSONObject(0).getString("distance")
-                    + ", " + resultObj.getJSONArray("legs").getJSONObject(1).getString("duration"));
+            Log.v("JSON data: legs", resultObj.getJSONArray("legs").toString());
+            Log.v("JSON data: distance", resultObj.getJSONArray("legs").getJSONObject(0).getString("distance"));
+            Log.v("JSON data: duration", resultObj.getJSONArray("legs").getJSONObject(0).getString("duration"));
 
         }
 

@@ -49,7 +49,8 @@ public class RoutesRecylerViewAdapter extends RecyclerView.Adapter<RoutesRecyler
     @Override
     public void onBindViewHolder(RouteViewHolder holder, int position)
     {
-        holder.distanceAndTime.setText(routes.get(position).getDistance());
+        int actualPos = position + 1;
+        holder.distanceAndTime.setText("Route " + actualPos + ": " + routes.get(position).getDistance() + ", " + routes.get(position).getTotalTime());
     }
 
     @Override

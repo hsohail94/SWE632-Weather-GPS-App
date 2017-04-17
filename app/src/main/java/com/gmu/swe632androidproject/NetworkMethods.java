@@ -19,7 +19,8 @@ public final class NetworkMethods
     private static final String TAG = NetworkMethods.class.getSimpleName(); //will be used for logcat print statements
 
     //This is the Google API KEY for things like Maps and whatnot
-    private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
+    //private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
+    private static final String API_KEY = "AIzaSyBVGhILjQgCPzE4R_zelzcZCiGrOJ__SFM";
 
     //URL for getting only JSON data for a particular route
     private static final String JSON_ROUTE_URL = "https://maps.googleapis.com/maps/api/directions/json";
@@ -32,6 +33,10 @@ public final class NetworkMethods
 
     //Parameter for destination
     private static final String DEST_PARAM = "destination";
+
+    //If you don't set this parameter in the HTTP request, you will not get multiple routes
+    private static final String ALTERNATIVE_ROUTES = "alternatives";
+    private static final String ALTERNATIVE_CHOICES = "true"; //set this to true, by default
 
     //By default, units are imperial, since we're building this in America. But, they can be changed to metric too.
     //A method will be written for this
@@ -49,7 +54,7 @@ public final class NetworkMethods
     public static URL buildCardsJSONURL (String sourceString, String destinationString)
     {
         Uri builtJsonUri = Uri.parse(JSON_ROUTE_URL).buildUpon().appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(SOURCE_PARAM, sourceString)
-                            .appendQueryParameter(DEST_PARAM, destinationString).appendQueryParameter("key", API_KEY).build();
+                            .appendQueryParameter(DEST_PARAM, destinationString).appendQueryParameter(ALTERNATIVE_ROUTES, ALTERNATIVE_CHOICES).appendQueryParameter("key", API_KEY).build();
 
         URL jsonURL = null;
         try

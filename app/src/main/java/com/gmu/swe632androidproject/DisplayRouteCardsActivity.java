@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class DisplayRouteCardsActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mCardsRV.setLayoutManager(layoutManager);
         mCardsRV.setHasFixedSize(true);
+        mCardsRV.setVisibility(View.VISIBLE);
 
         AsyncRouteCards asyncTask = new AsyncRouteCards(mapsJSONUrl, this, mCardsRV);
         asyncTask.execute();
