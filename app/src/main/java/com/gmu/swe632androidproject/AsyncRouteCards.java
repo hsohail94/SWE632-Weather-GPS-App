@@ -32,8 +32,9 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
     private ProgressDialog progressDialog;
     private Activity context;
     private RecyclerView rv;
+    private RoutesRecyclerViewAdapterOnClickHander onClickHander;
 
-    public AsyncRouteCards (URL jsonURL, Activity context, RecyclerView rv, String sourceAddress, String destAddress)
+    public AsyncRouteCards (URL jsonURL, Activity context, RecyclerView rv, String sourceAddress, String destAddress, RoutesRecyclerViewAdapterOnClickHander onClickHander)
     {
         //this.elementPairs = elementPairs;
         this.jsonURL = jsonURL;
@@ -41,6 +42,7 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         this.rv = rv;
         this.sourceAddress = sourceAddress;
         this.destAddress = destAddress;
+        this.onClickHander = onClickHander;
     }
 
     protected void onPreExecute()
@@ -131,7 +133,7 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         //call a method for initializing our routes to be displayed
         //then use our new arraylist to create our RecyclerView's adapter
         ArrayList<Route> allRoutes = initializeRoutes(jsonResultsList);
-        RoutesRecylerViewAdapter adapter = new RoutesRecylerViewAdapter(allRoutes);
+        RoutesRecylerViewAdapter adapter = new RoutesRecylerViewAdapter(allRoutes, this.onClickHander);
         rv.setAdapter(adapter);
     }
 
