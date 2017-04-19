@@ -2,14 +2,10 @@ package com.gmu.swe632androidproject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ScrollingTabContainerView;
 import android.util.Log;
 
-import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,7 +129,7 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         //call a method for initializing our routes to be displayed
         //then use our new arraylist to create our RecyclerView's adapter
         ArrayList<Route> allRoutes = initializeRoutes(jsonResultsList);
-        RoutesRecylerViewAdapter adapter = new RoutesRecylerViewAdapter(allRoutes, this.onClickHander);
+        RoutesRecyclerViewAdapter adapter = new RoutesRecyclerViewAdapter(allRoutes, this.onClickHander);
         rv.setAdapter(adapter);
     }
 

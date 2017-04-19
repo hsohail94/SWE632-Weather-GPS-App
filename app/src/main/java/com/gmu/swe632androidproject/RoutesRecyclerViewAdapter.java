@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 
 //Adapter class for the RecyclerView that shows our routes in cards
-public class RoutesRecylerViewAdapter extends RecyclerView.Adapter<RoutesRecylerViewAdapter.RouteViewHolder>
+public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewAdapter.RouteViewHolder>
 {
     //Variable to be used for handling click events
     private final RoutesRecyclerViewAdapterOnClickHander onClickHandler;
 
     //ViewHolder extension; to be used for inflating adapter with route cards
-    public class RouteViewHolder extends RecyclerView.ViewHolder implements RoutesRecyclerViewAdapterOnClickHander
+    public class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private CardView routeCardView;
         private TextView distanceAndTime;
@@ -30,10 +30,10 @@ public class RoutesRecylerViewAdapter extends RecyclerView.Adapter<RoutesRecyler
             super(routeView);
             routeCardView = (CardView) itemView.findViewById(R.id.routes_cardview);
             distanceAndTime = (TextView) itemView.findViewById(R.id.distance_and_time);
+            routeView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClickCardItem ()
+        public void onClick (View view)
         {
             onClickHandler.onClickCardItem();
         }
@@ -42,7 +42,7 @@ public class RoutesRecylerViewAdapter extends RecyclerView.Adapter<RoutesRecyler
 
     private ArrayList<Route> routes; //the list of routes that will be used in the inflated cardview
 
-    public RoutesRecylerViewAdapter (ArrayList<Route> routes, RoutesRecyclerViewAdapterOnClickHander onClickHandler)
+    public RoutesRecyclerViewAdapter(ArrayList<Route> routes, RoutesRecyclerViewAdapterOnClickHander onClickHandler)
     {
         this.routes = routes;
         this.onClickHandler = onClickHandler;
