@@ -1,13 +1,19 @@
 package com.gmu.swe632androidproject;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -103,6 +109,46 @@ public final class NetworkMethods
         {
             urlConnection.disconnect();
         }
+    }
+
+    /**
+     * Method for converting a user provided address, in String form, into latitude and longitude coordinates.
+     * Will need this for drawing routes in Google Maps.
+     *
+     * @param context
+     * @param userAddress
+     * @return
+     */
+    public static LatLng getLatitudeLongitudeFromUserString (Context context, String userAddress)
+    {
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addresses;
+        LatLng point1 = null;
+
+        try
+        {
+            addresses = geocoder.getFromLocationName(userAddress, 5); //running this could throw an IOException
+            if (addresses == null)
+                return null;
+            Address location = addresses.get(0);
+            point1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (IOException e)
+        {
+            Log.e("LatLong error: ", e.getMessage());
+        }
+        return point1;
+    }
+
+    /**
+     * Method for setting units of choice: imperial (mi & F vs km & C)
+     *
+     * @param userChoice - will be set in a Navigation Menu
+     */
+    public void imperialOrMetric (String userChoice)
+    {
+        if (userChoice.equalsIgnoreCase("metric"))
+            units = "metric";
     }
 
 }

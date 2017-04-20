@@ -38,7 +38,7 @@ public class DisplayRouteCardsActivity extends AppCompatActivity implements Rout
         mCardsRV.setHasFixedSize(true);
         mCardsRV.setVisibility(View.VISIBLE);
 
-        RoutesRecyclerViewAdapterOnClickHander onClickHander = (RoutesRecyclerViewAdapterOnClickHander)this;
+        RoutesRecyclerViewAdapterOnClickHander onClickHander = this;
         AsyncRouteCards asyncTask = new AsyncRouteCards(mapsJSONUrl, this, mCardsRV, userSource, userDestination, onClickHander);
         asyncTask.execute();
     }
