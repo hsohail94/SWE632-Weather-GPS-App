@@ -10,9 +10,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class SingleRouteMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ArrayList mapMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +41,20 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        //*Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Bundle extras = getIntent().getExtras();
+        String userSource = extras.getString("source location");
+        String userDestination = extras.getString("destination address");
 
+        //Setting the markers for our origin and destination on the map
+        LatLng origin = NetworkMethods.getLatitudeLongitudeFromUserString(this, userSource);
+        LatLng destination = NetworkMethods.getLatitudeLongitudeFromUserString(this, userDestination);
+        mMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
+        mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
     }
 
 

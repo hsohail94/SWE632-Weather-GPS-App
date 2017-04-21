@@ -2,9 +2,12 @@ package com.gmu.swe632androidproject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import com.github.pwittchen.weathericonview.WeatherIconView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,6 +108,12 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
      */
     private void showJSONRoutesInRecyclerView (JSONArray jsonArray) throws JSONException
     {
+        /*WeatherIconView weatherIconView;
+        weatherIconView = (WeatherIconView) this.context.findViewById(R.id.average_weather_icon);
+        weatherIconView.setIconResource(this.context.getString(R.string.wi_strong_wind));
+        weatherIconView.setIconSize(100);
+        weatherIconView.setIconColor(Color.BLACK);*/
+
         JSONArray routeResults = jsonArray; //defensive programming!
         final ArrayList<HashMap<String,String>> jsonResultsList = new ArrayList<HashMap<String, String>>(); //build a mapping of our JSON objects in List format
 

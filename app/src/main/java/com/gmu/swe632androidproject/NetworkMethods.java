@@ -78,6 +78,39 @@ public final class NetworkMethods
     }
 
     /**
+     * Another URL builder method for the Maps Directions API, except this one is geared towards displays for our MapAcitivity.
+     * Hence, our use of lat-long pairs instead of user-provided addresses.
+     *
+     * @param originLatitude: latitude of the origin address
+     * @param originLongitude: longitude of the origin address
+     * @param destLatitude: latitude of the destination address
+     * @param destLongitude: longitude of the destination address
+     * @return a URL to request Directions from the Maps API
+     */
+    public static URL buildMapJSONURL (Double originLatitude, Double originLongitude, Double destLatitude, Double destLongitude)
+    {
+        //Uri builtJsonUri = Uri.parse(JSON_ROUTE_URL).buildUpon().appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(SOURCE_PARAM, sourceString)
+                //.appendQueryParameter(DEST_PARAM, destinationString).appendQueryParameter(ALTERNATIVE_ROUTES, ALTERNATIVE_CHOICES).appendQueryParameter("key", API_KEY).build();
+        Uri builtMapsUri = Uri.parse(JSON_ROUTE_URL).buildUpon().appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(SOURCE_PARAM, originLatitude + "," + originLongitude)
+                                .appendQueryParameter(DEST_PARAM, destLatitude + "," + destLongitude).appendQueryParameter(ALTERNATIVE_ROUTES, ALTERNATIVE_CHOICES)
+                                .appendQueryParameter("sensor", "false").appendQueryParameter("key", API_KEY).build();
+
+        URL jsonURL = null;
+        try
+        {
+            jsonURL = new URL(builtMapsUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built MAPS URL = " + jsonURL);
+
+        return jsonURL;
+    }
+
+    /**
      * This method is used to capture the JSON response from an HTTP request.
      * This is a generic method that will be used frequently by this application
      *
