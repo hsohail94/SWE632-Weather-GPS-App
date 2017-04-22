@@ -35,7 +35,8 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
         public void onClick (View view)
         {
-            onClickHandler.onClickCardItem();
+            onClickHandler.onClickCardItem(getAdapterPosition());
+            //onClickHandler.onClickCardItem();
         }
 
     }

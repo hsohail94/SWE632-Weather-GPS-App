@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
-import com.github.pwittchen.weathericonview.WeatherIconView;
+//import com.github.pwittchen.weathericonview.WeatherIconView;
+
+import org.json.JSONArray;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,11 +50,23 @@ public class DisplayRouteCardsActivity extends AppCompatActivity implements Rout
     }
 
     @Override
-    public void onClickCardItem()
+    public void onClickCardItem(int position)
+    //public void onClickCardItem()
     {
         Intent i = new Intent(DisplayRouteCardsActivity.this, SingleRouteMapActivity.class);
+        //int focusPosition = mCardsRV.getChildAdapterPosition(mCardsRV.getFocusedChild());
+        //int focusPosition = 1;
         i.putExtra("source location", userSource);
         i.putExtra("destination address", userDestination);
-        startActivity(i);
+        //i.putExtra("routes JSON array", routesJSONArray.toString());
+        i.putExtra("route number", position);
+        try {
+            startActivity(i);
+        }
+        catch (Exception e)
+        {
+            Log.v("Something went wrong", e.getMessage());
+        }
     }
+
 }

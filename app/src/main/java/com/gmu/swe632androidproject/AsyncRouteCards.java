@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.github.pwittchen.weathericonview.WeatherIconView;
+//import com.github.pwittchen.weathericonview.WeatherIconView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +29,11 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
     private String destAddress;
     private URL jsonURL;
     private ProgressDialog progressDialog;
-    private Activity context;
+    private DisplayRouteCardsActivity context;
     private RecyclerView rv;
     private RoutesRecyclerViewAdapterOnClickHander onClickHander;
 
-    public AsyncRouteCards (URL jsonURL, Activity context, RecyclerView rv, String sourceAddress, String destAddress, RoutesRecyclerViewAdapterOnClickHander onClickHander)
+    public AsyncRouteCards (URL jsonURL, DisplayRouteCardsActivity context, RecyclerView rv, String sourceAddress, String destAddress, RoutesRecyclerViewAdapterOnClickHander onClickHander)
     {
         //this.elementPairs = elementPairs;
         this.jsonURL = jsonURL;
@@ -140,6 +140,9 @@ public class AsyncRouteCards extends AsyncTask <String, String, JSONArray>
         ArrayList<Route> allRoutes = initializeRoutes(jsonResultsList);
         RoutesRecyclerViewAdapter adapter = new RoutesRecyclerViewAdapter(allRoutes, this.onClickHander);
         rv.setAdapter(adapter);
+
+        //pass routes JSON array back to the displayroutes activity; this will come in very handy
+        //this.context.retainRoutesJSONArray(routeResults);
     }
 
     /**

@@ -1,7 +1,11 @@
 package com.gmu.swe632androidproject;
 
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,8 +13,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SingleRouteMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -38,7 +50,9 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
+        Log.v("MAP ACTIVITY: ", "setting map now");
         mMap = googleMap;
 
         //*Add a marker in Sydney and move the camera
@@ -48,14 +62,26 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
         Bundle extras = getIntent().getExtras();
         String userSource = extras.getString("source location");
         String userDestination = extras.getString("destination address");
+        //String routesJsonString = extras.getString("routes JSON array");
+        int routeNumber = extras.getInt("route number");
+        try
+        {
+            //Setting the markers for our origin and destination on the map
+            LatLng origin = NetworkMethods.getLatitudeLongitudeFromUserString(this, userSource);
+            LatLng destination = NetworkMethods.getLatitudeLongitudeFromUserString(this, userDestination);
+            mMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
+            mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
 
-        //Setting the markers for our origin and destination on the map
-        LatLng origin = NetworkMethods.getLatitudeLongitudeFromUserString(this, userSource);
-        LatLng destination = NetworkMethods.getLatitudeLongitudeFromUserString(this, userDestination);
-        mMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
-        mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
+            URL buildMapsRouteURL = NetworkMethods.buildMapJSONURL(origin.latitude, origin.longitude,
+                                    destination.latitude, destination.longitude);
+            AsyncDrawMapTask asyncDrawMapTask = new AsyncDrawMapTask(routeNumber, buildMapsRouteURL, this, mMap);
+            asyncDrawMapTask.execute();
+        }
+        catch (Exception e)
+        {
+            Log.e("JSON Exception: ", e.getMessage());
+        }
     }
-
 
 }

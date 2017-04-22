@@ -89,8 +89,6 @@ public final class NetworkMethods
      */
     public static URL buildMapJSONURL (Double originLatitude, Double originLongitude, Double destLatitude, Double destLongitude)
     {
-        //Uri builtJsonUri = Uri.parse(JSON_ROUTE_URL).buildUpon().appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(SOURCE_PARAM, sourceString)
-                //.appendQueryParameter(DEST_PARAM, destinationString).appendQueryParameter(ALTERNATIVE_ROUTES, ALTERNATIVE_CHOICES).appendQueryParameter("key", API_KEY).build();
         Uri builtMapsUri = Uri.parse(JSON_ROUTE_URL).buildUpon().appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(SOURCE_PARAM, originLatitude + "," + originLongitude)
                                 .appendQueryParameter(DEST_PARAM, destLatitude + "," + destLongitude).appendQueryParameter(ALTERNATIVE_ROUTES, ALTERNATIVE_CHOICES)
                                 .appendQueryParameter("sensor", "false").appendQueryParameter("key", API_KEY).build();
@@ -174,11 +172,11 @@ public final class NetworkMethods
     }
 
     /**
-     * Method for setting units of choice: imperial (mi & F vs km & C)
+     * Method for setting units of choice: imperial or metric (mi & F vs km & C)
      *
      * @param userChoice - will be set in a Navigation Menu
      */
-    public void imperialOrMetric (String userChoice)
+    public static void imperialOrMetric (String userChoice)
     {
         if (userChoice.equalsIgnoreCase("metric"))
             units = "metric";

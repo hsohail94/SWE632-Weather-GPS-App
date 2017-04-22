@@ -36,7 +36,7 @@
                 android:layout_below="@id/distance_and_time"
                 android:textSize="15sp"/>
 
-
+            <!--
             <com.github.pwittchen.weathericonview.WeatherIconView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -44,7 +44,7 @@
                 android:id="@+id/average_weather_icon"
                 android:gravity="right"
                 custom:weatherIconResource="@string/wi_day_sunny_overcast"
-                custom:weatherIconColor="@android:color/black"/>
+                custom:weatherIconColor="@android:color/black"/>-->
 
         </RelativeLayout>
 

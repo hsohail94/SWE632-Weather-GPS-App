@@ -6,5 +6,6 @@ package com.gmu.swe632androidproject;
 
 public interface RoutesRecyclerViewAdapterOnClickHander
 {
-    void onClickCardItem ();
+    void onClickCardItem (int position);
+    //void onClickCardItem ();
 }
