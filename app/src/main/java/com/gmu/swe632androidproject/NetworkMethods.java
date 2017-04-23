@@ -180,6 +180,8 @@ public final class NetworkMethods
     {
         if (userChoice.equalsIgnoreCase("metric"))
             units = "metric";
+        else if (userChoice.equalsIgnoreCase("imperial"))
+            units = "imperial";
     }
 
 }

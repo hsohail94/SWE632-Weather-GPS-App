@@ -1,13 +1,17 @@
 package com.gmu.swe632androidproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -72,13 +76,44 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * This method will set the options for our navigation drawer. Things like changing units from imperial to metric,
-     * and vice versa.
+     * and vice versa. Will also set onclick behavior for options in our drawer
      */
     private void addUserPreferenceItems()
     {
-        String[] userOptions = {"Select Units", "View License"};
+        final String[] userOptions = {"Select Units", "View License"};
         preferencesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userOptions);
         preferencesListView.setAdapter(preferencesListAdapter);
+        //setting onclick functionality for options in navigation drawer
+        preferencesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                //this is what happens when you choose the select units option
+                if (userOptions[position].equals("Select Units"))
+                {
+                    AlertDialog.Builder unitsDialogBuilder = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
+                    unitsDialogBuilder.setMessage("Select Units of Choice").setCancelable(false)
+                            .setPositiveButton("Imperial (miles and Farenheit)", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NetworkMethods.imperialOrMetric("imperial");
+                                    Toast.makeText(MainActivity.this, "Units set to Imperial (miles and Farenheit).", Toast.LENGTH_SHORT).show();
+                                    dialogInterface.dismiss();
+                                }
+                            }).setNegativeButton("Metric (km and Celsius)", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            NetworkMethods.imperialOrMetric("metric");
+                            Toast.makeText(MainActivity.this, "Units set to Metric (km and Celsius).", Toast.LENGTH_SHORT).show();
+                            dialogInterface.dismiss();
+                        }
+                    });
+
+                    AlertDialog userUnitsDialog = unitsDialogBuilder.create();
+                    userUnitsDialog.show();
+                }
+            }
+        });
     }
 
     /**
