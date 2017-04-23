@@ -16,8 +16,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by haaris on 4/22/17.
@@ -47,10 +50,15 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
 
     }
 
+
     @Override
     protected JSONArray doInBackground(Void... voids) {
+    //protected List<JSONArray> doInBackground (Void... voids){
         JSONObject jsonDataObject = null;
         JSONArray routesJsonArray = null;
+        int runningDurationSum = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         //Try getting a JSON data response from our Maps API Call
         try
@@ -61,10 +69,40 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
 
             Log.d("JSON Data returned: ", jsonDataResponse);
 
-            if (jsonDataObject.has("routes")) {
+            if (jsonDataObject.has("routes"))
+            {
                 routesJsonArray = jsonDataObject.getJSONArray("routes"); //store routes in this object
                 Log.d("Json routes returned: ", routesJsonArray.toString());
+                int overallTime = 0;
+                String[] timeStringSplit;
+                //This will be for building our weather API request
+                JSONObject legsOfSpecificRoute = routesJsonArray.getJSONObject(routeNumber).getJSONArray("legs").getJSONObject(0);
+                JSONArray stepsOfLegsOfRoute = legsOfSpecificRoute.getJSONArray("steps");
+                for (int i = 0; i < stepsOfLegsOfRoute.length(); i++)
+                {
+                    JSONObject individualStep = stepsOfLegsOfRoute.getJSONObject(i);
+                    String timeOfStep = individualStep.getJSONObject("duration").getString("text");
+                    Log.v("Step duration: ", timeOfStep);
+                    if (timeOfStep.contains("hours") && timeOfStep.contains("mins"))
+                    {
+                        timeStringSplit = timeOfStep.split("\\s+"); //split along whitespace
+                        overallTime = (Integer.parseInt(timeStringSplit[0]) * 60) + Integer.parseInt(timeStringSplit[2]);
+
+                    }
+                    else if (timeOfStep.contains("mins"))
+                    {
+                        timeStringSplit = timeOfStep.split("\\s+"); //same split, but only contains mins
+                        overallTime = Integer.parseInt(timeStringSplit[0]);
+                    }
+                    runningDurationSum += overallTime;
+                    Log.v("Minutes total for step", Integer.toString(overallTime));
+                    Calendar timeAtStep = NetworkMethods.getCalendarDateTimeAfterMinutesAdd(runningDurationSum);
+                    Log.v("Time at step", sdf.format(timeAtStep.getTime()));
+                }
+
             }
+
+
         }
         catch (IOException e)
         {
@@ -76,6 +114,8 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
         }
 
         return routesJsonArray;
+
+
     }
 
     protected void onPostExecute (JSONArray jsonArray)

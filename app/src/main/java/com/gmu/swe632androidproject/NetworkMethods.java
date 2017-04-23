@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,8 +14,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 /**
  * Created by haaris on 4/12/17.
@@ -28,8 +33,14 @@ public final class NetworkMethods
     //private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
     private static final String API_KEY = "AIzaSyBVGhILjQgCPzE4R_zelzcZCiGrOJ__SFM";
 
+    //This is our API KEY for the OpenWeatherMaps API
+    private static final String OWM_API_KEY = "728457692c1769f25424b3fe8f71b018";
+
     //URL for getting only JSON data for a particular route
     private static final String JSON_ROUTE_URL = "https://maps.googleapis.com/maps/api/directions/json";
+
+    //URL for getting JSON data from the OpenWeatherMaps API
+    private static final String JSON_WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast";
 
     //Parameter for units; choice between metric and imperial in user preferences
     private static final String UNITS_PARAM = "units";
@@ -108,6 +119,25 @@ public final class NetworkMethods
         return jsonURL;
     }
 
+    public static URL buildWeatherRequestURL (Double latitude, Double longitude)
+    {
+        Uri builtWeatherUri = Uri.parse(JSON_WEATHER_URL).buildUpon().appendQueryParameter("lat", Double.toString(latitude))
+                                .appendQueryParameter("lon",Double.toString(longitude)).appendQueryParameter(UNITS_PARAM, units)
+                                .appendQueryParameter("mode", "json").appendQueryParameter("APPID", OWM_API_KEY).build();
+        URL jsonWeatherURL = null;
+        try
+        {
+            jsonWeatherURL = new URL (builtWeatherUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            Log.v("JSON Weather URL Issue", e.getMessage());
+        }
+        Log.v(TAG, "Built OWM API URL = " + jsonWeatherURL);
+
+        return jsonWeatherURL;
+    }
+
     /**
      * This method is used to capture the JSON response from an HTTP request.
      * This is a generic method that will be used frequently by this application
@@ -183,5 +213,19 @@ public final class NetworkMethods
         else if (userChoice.equalsIgnoreCase("imperial"))
             units = "imperial";
     }
+
+    /**
+     * Get current system in UTC/GMT format.
+     *
+     * @return
+     */
+    public static Calendar getCalendarDateTimeAfterMinutesAdd(int minutes)
+    {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar;
+    }
+
+
 
 }
