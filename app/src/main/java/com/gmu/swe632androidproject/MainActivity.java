@@ -1,25 +1,45 @@
 package com.gmu.swe632androidproject;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
 {
+    //The Views of the data the user will be entering
     private EditText sourceText;
     private EditText destinationText;
+
+    //Variables we will need to setup our navigation drawer for user preferences
+    private ListView preferencesListView;
+    private ArrayAdapter<String> preferencesListAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout preferencesDrawerLayout;
+    private String activityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    //TODO #1: Need to setup a menu with user preferences (add menu/preferences.xml to res, and see how to go from there)
-    //TODO #2: Override onCreateOptionsMenu and onOptionsItemSelected in this class for handling the Menu
+        //setup our hamburger navigation menu
+        preferencesDrawerLayout = (DrawerLayout) findViewById(R.id.main_navigation_drawer);
+        activityTitle = getTitle().toString();
+        preferencesListView = (ListView) findViewById (R.id.preferences_list);
+        addUserPreferenceItems();
+        setPreferencesDrawerToggle();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
 
     /**
      * This method is responsible for passing along the user-provided data to any
@@ -49,4 +69,70 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
         }
     }
+
+    /**
+     * This method will set the options for our navigation drawer. Things like changing units from imperial to metric,
+     * and vice versa.
+     */
+    private void addUserPreferenceItems()
+    {
+        String[] userOptions = {"Select Units", "View License"};
+        preferencesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userOptions);
+        preferencesListView.setAdapter(preferencesListAdapter);
+    }
+
+    /**
+     * This method will essentially create a toggle for the hamburger button that opens the navigation drawer.
+     * When we open and close the navigation drawer, we also want to have additional behavior alongside it,
+     * such as changing the current activity title
+     */
+    private void setPreferencesDrawerToggle()
+    {
+        mDrawerToggle = new ActionBarDrawerToggle(this, preferencesDrawerLayout, R.string.open_preferences_drawer,
+                                                    R.string.close_preferences_drawer) {
+            public void onDrawerOpened (View drawer)
+            {
+                super.onDrawerOpened(drawer);
+                getSupportActionBar().setTitle("User Options");
+                //invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed (View drawer)
+            {
+                super.onDrawerClosed(drawer);
+                getSupportActionBar().setTitle(activityTitle);
+                //invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        preferencesDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+
+        if (id == R.id.user_options)
+            return true;
+
+        if (mDrawerToggle.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
