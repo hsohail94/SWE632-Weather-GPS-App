@@ -28,6 +28,8 @@ import java.util.TimeZone;
 
 public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
 {
+    private URL weatherAPIUrl;
+    private List<LatLng> routeWeatherMarkerList;
     private ProgressDialog progressDialog;
     private int routeNumber;
     private URL mapsRouteUrl;
@@ -52,13 +54,19 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
 
 
     @Override
-    protected JSONArray doInBackground(Void... voids) {
+    protected JSONArray doInBackground(Void... voids)
+    {
     //protected List<JSONArray> doInBackground (Void... voids){
         JSONObject jsonDataObject = null;
         JSONArray routesJsonArray = null;
+        JSONObject weatherJsonDataObj = null;
+        JSONArray weatherJsonArray = null;
+
         int runningDurationSum = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        LatLng objectToSend = null;
+        routeWeatherMarkerList = new ArrayList<LatLng>();
 
         //Try getting a JSON data response from our Maps API Call
         try
@@ -75,6 +83,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                 Log.d("Json routes returned: ", routesJsonArray.toString());
                 int overallTime = 0;
                 String[] timeStringSplit;
+
                 //This will be for building our weather API request
                 JSONObject legsOfSpecificRoute = routesJsonArray.getJSONObject(routeNumber).getJSONArray("legs").getJSONObject(0);
                 JSONArray stepsOfLegsOfRoute = legsOfSpecificRoute.getJSONArray("steps");
@@ -83,21 +92,42 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                     JSONObject individualStep = stepsOfLegsOfRoute.getJSONObject(i);
                     String timeOfStep = individualStep.getJSONObject("duration").getString("text");
                     Log.v("Step duration: ", timeOfStep);
-                    if (timeOfStep.contains("hours") && timeOfStep.contains("mins"))
+
+                    if (timeOfStep.contains("hours") && timeOfStep.contains("min"))
                     {
                         timeStringSplit = timeOfStep.split("\\s+"); //split along whitespace
                         overallTime = (Integer.parseInt(timeStringSplit[0]) * 60) + Integer.parseInt(timeStringSplit[2]);
 
                     }
-                    else if (timeOfStep.contains("mins"))
+                    else if (timeOfStep.contains("min"))
                     {
                         timeStringSplit = timeOfStep.split("\\s+"); //same split, but only contains mins
                         overallTime = Integer.parseInt(timeStringSplit[0]);
                     }
+
                     runningDurationSum += overallTime;
                     Log.v("Minutes total for step", Integer.toString(overallTime));
                     Calendar timeAtStep = NetworkMethods.getCalendarDateTimeAfterMinutesAdd(runningDurationSum);
                     Log.v("Time at step", sdf.format(timeAtStep.getTime()));
+                    Log.v("Time since start", Integer.toString(runningDurationSum));
+
+                    //If we've passed a certain interval (between 2.5 and 4 hours), we'll draw a marker at that location
+                    //So for that location, we'll send a weather API call to fetch the weather at that location at that time.
+                    //The weather data itself isn't very flexible for time, so we'll just need to do some interval comparisons
+                    //there too.
+                    if (runningDurationSum >= 200 && runningDurationSum <= 400)
+                    {
+                        JSONObject currentLatLngObj = individualStep.getJSONObject("end_location");
+                        objectToSend = new LatLng(currentLatLngObj.getDouble("lat"),
+                                                    currentLatLngObj.getDouble("lng"));
+                        routeWeatherMarkerList.add(objectToSend);
+                        weatherAPIUrl = NetworkMethods.buildWeatherRequestURL(objectToSend.latitude, objectToSend.longitude);
+                        String jsonWeatherDataResponse = NetworkMethods.getResponseFromHttpUrl(weatherAPIUrl);
+                        Log.v("JSON Weather Data", jsonWeatherDataResponse);
+                        weatherJsonDataObj = new JSONObject(jsonWeatherDataResponse);
+                        weatherJsonArray = weatherJsonDataObj.getJSONArray("list");
+                        Log.v("Weather List at step", weatherJsonArray.toString());
+                    }
                 }
 
             }
@@ -111,6 +141,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
         catch (JSONException e)
         {
             Log.e("Error: ", e.getMessage());
+            e.printStackTrace();
         }
 
         return routesJsonArray;
