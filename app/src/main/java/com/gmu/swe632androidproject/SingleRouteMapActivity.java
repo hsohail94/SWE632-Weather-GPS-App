@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -71,6 +72,7 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
             LatLng destination = NetworkMethods.getLatitudeLongitudeFromUserString(this, userDestination);
             mMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
             mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
+            //mMap.setOnInfoWindowClickListener(this);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
 
             URL buildMapsRouteURL = NetworkMethods.buildMapJSONURL(origin.latitude, origin.longitude,
@@ -84,4 +86,10 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
         }
     }
 
+    /*
+    @Override
+    public void onInfoWindowClick(Marker marker)
+    {
+
+    }*/
 }

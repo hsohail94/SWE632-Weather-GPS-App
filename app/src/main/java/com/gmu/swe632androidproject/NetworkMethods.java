@@ -15,9 +15,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.TimeZone;
 
@@ -219,13 +222,29 @@ public final class NetworkMethods
      *
      * @return
      */
-    public static Calendar getCalendarDateTimeAfterMinutesAdd(int minutes)
+    public static Calendar getCalendarDateTimeAfterMinutesAdd(Calendar c, int minutes)
     {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.add(Calendar.MINUTE, minutes);
-        return calendar;
+        //Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        //calendar.add(Calendar.MINUTE, minutes);
+        c.add(Calendar.MINUTE,minutes);
+        return c;
     }
 
+    /**
+     * Create a calendar object from a String parameter according to the format parameter.
+     *
+     * @param dateString
+     * @param format
+     * @return A new calendar object based on the dateString parameter
+     */
+    public static Calendar getCalendarObjFromString(String dateString, String format) throws ParseException
+    {
+        Calendar cal = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+        Date date = sdf.parse(dateString);
+        cal = sdf.getCalendar();
 
+        return cal;
+    }
 
 }
