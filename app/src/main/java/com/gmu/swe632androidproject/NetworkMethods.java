@@ -61,6 +61,7 @@ public final class NetworkMethods
     //By default, units are imperial, since we're building this in America. But, they can be changed to metric too.
     //A method will be written for this
     private static String units = "imperial";
+    public static int imperialOrMetric;
 
     /**
      * Builder method used to build the URL that will request JSON data via the Google Maps API.
@@ -211,14 +212,19 @@ public final class NetworkMethods
      */
     public static void imperialOrMetric (String userChoice)
     {
-        if (userChoice.equalsIgnoreCase("metric"))
+        if (userChoice.equalsIgnoreCase("metric")) {
             units = "metric";
-        else if (userChoice.equalsIgnoreCase("imperial"))
+            imperialOrMetric=1;
+        }
+        else if (userChoice.equalsIgnoreCase("imperial")) {
             units = "imperial";
+            imperialOrMetric = 0;
+        }
     }
 
     /**
-     * Get current system in UTC/GMT format.
+     * A method for adding time to a calendar object. Basically: convert the additional time you want in minutes,
+     * then pass that along with your Calendar object, and return the resulting calendar object.
      *
      * @return
      */

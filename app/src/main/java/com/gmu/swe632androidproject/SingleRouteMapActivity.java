@@ -1,11 +1,15 @@
 package com.gmu.swe632androidproject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +27,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SingleRouteMapActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -92,4 +97,5 @@ public class SingleRouteMapActivity extends FragmentActivity implements OnMapRea
     {
 
     }*/
+
 }

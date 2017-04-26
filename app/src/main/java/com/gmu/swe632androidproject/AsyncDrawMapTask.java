@@ -40,6 +40,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
     private List<JSONObject> weatherJsonObjForMarkersList;
     private HashMap<LatLng, JSONObject> routeMarkerToWeatherForecastMap;
     private HashMap<LatLng, String> latLngToPlaceNameMap;
+    private HashMap<LatLng,Marker> coordinatesToMapMarkersMap;
 
     private ProgressDialog progressDialog;
     private String weatherDateFormat = "yyyy-MM-dd HH:mm:ss";
@@ -59,7 +60,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
     protected void onPreExecute()
     {
         progressDialog = new ProgressDialog(this.context);
-        progressDialog.setMessage("Drawing selected route...");
+        progressDialog.setMessage("Drawing selected route with select weather markers. Click on each marker to find out about the weather at that location...");
         progressDialog.show();
 
     }
@@ -138,7 +139,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                     //So for that location, we'll send a weather API call to fetch the weather at that location at that time.
                     //The weather data itself isn't very flexible for time, so we'll just need to do some interval comparisons
                     //there too.
-                    if (runningDurationSum >= 120 && runningDurationSum <= 240)
+                    if (runningDurationSum >= 50 && runningDurationSum <= 500)
                     {
                         JSONObject currentLatLngObj = individualStep.getJSONObject("end_location");
                         objectToSend = new LatLng(currentLatLngObj.getDouble("lat"), currentLatLngObj.getDouble("lng"));
@@ -258,6 +259,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
      */
     protected void drawRouteMarkersWithWeather() throws JSONException
     {
+        /*
         int i = 0;
         HashMap<LatLng,String> latLngStringHashMap = latLngToPlaceNameMap;
         HashMap<LatLng,JSONObject> latLngJSONObjectHashMap = routeMarkerToWeatherForecastMap;
@@ -275,15 +277,23 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
             MarkerOptions markerOption = new MarkerOptions().position(coordinate).title("Marker " + i)
                                                 .snippet(windowData).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
             this.mMap.addMarker(markerOption);
-        }
+        }*/
+
+        convertLatLngPairsToMarkersOnMap();
+        HashMap<Marker,String> markerStringHashMap = buildLocationMarkerToPlaceNameAndCountryMap();
+        HashMap<Marker,JSONObject> markerJSONObjectHashMap = buildLocationMarkerToWeatherJsonObjMap();
+        WeatherMarkerInfoWindow infoWindow = new WeatherMarkerInfoWindow(markerJSONObjectHashMap,markerStringHashMap, this.context);
+        this.mMap.setInfoWindowAdapter(infoWindow);
+        //this.mMap.setOnInfoWindowClickListener(infoWindow);
     }
 
     /**
      * Step 1: convert the LatLng pairs we've obtained for our weather forecasts, place it in a map,
      * and convert them to Google Maps Marker representations.
      * @return
+     */
 
-    private HashMap<LatLng,Marker> convertLatLngPairsToMarkersOnMap()
+    private void convertLatLngPairsToMarkersOnMap()
     {
         int i = 0;
         HashMap<LatLng, Marker> latLngMarkerHashMap = new HashMap<LatLng, Marker>();
@@ -291,20 +301,20 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
         {
             i++;
             Marker m = this.mMap.addMarker(new MarkerOptions().title("Marker " + i)
-                    .position(coordinate));
+                    .position(coordinate).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             latLngMarkerHashMap.put(coordinate,m);
         }
-        return latLngMarkerHashMap;
-    }*/
+        coordinatesToMapMarkersMap = latLngMarkerHashMap;
+    }
 
     /**
      * Step 2: each marker needs a string title to represent it. So we're getting the city and country name
      * matching the relevant latlng pair, and mapping that to the Maps Marker object.
      * @return
-
+     */
     private HashMap<Marker,String> buildLocationMarkerToPlaceNameAndCountryMap()
     {
-        HashMap<LatLng,Marker> latLngMarkerHashMap = convertLatLngPairsToMarkersOnMap();
+        HashMap<LatLng,Marker> latLngMarkerHashMap = coordinatesToMapMarkersMap;
         HashMap<Marker,String> markerStringHashMap = new HashMap<Marker, String>();
         HashMap<LatLng,String> latLngStringHashMap = latLngToPlaceNameMap;
 
@@ -316,19 +326,19 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
         }
 
         return markerStringHashMap;
-    }*/
+    }
 
 
     /**
      * Step 3: We have our Markers, and we have a map for latlng->JSONObject. Now, based on what we did in step 1,
      * we need to take the results from that method, and create a marker->JSONObject map.
      * @return
-
+     */
     private HashMap<Marker,JSONObject> buildLocationMarkerToWeatherJsonObjMap()
     {
         HashMap<Marker,JSONObject> markerJSONObjectHashMap = new HashMap<Marker, JSONObject>();
         HashMap<LatLng,JSONObject> latLngJSONObjectHashMap = routeMarkerToWeatherForecastMap;
-        HashMap<LatLng,Marker> latLngMarkerHashMap = convertLatLngPairsToMarkersOnMap();
+        HashMap<LatLng,Marker> latLngMarkerHashMap = coordinatesToMapMarkersMap;
 
         for (LatLng coordinate: latLngJSONObjectHashMap.keySet())
         {
@@ -338,7 +348,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
         }
 
         return  markerJSONObjectHashMap;
-    }*/
+    }
 
     /**
      * This method will be responsible for actually drawing the route between an origin and a
