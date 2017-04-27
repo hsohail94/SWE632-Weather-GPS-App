@@ -1,5 +1,6 @@
 package com.gmu.swe632androidproject;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.github.pwittchen.weathericonview.WeatherIconView;
 
 import org.w3c.dom.Text;
 
