@@ -117,7 +117,7 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                     String timeOfStep = individualStep.getJSONObject("duration").getString("text");
                     Log.v("Step duration: ", timeOfStep);
 
-                    if (timeOfStep.contains("hours") && timeOfStep.contains("min"))
+                    if (timeOfStep.contains("hour") && timeOfStep.contains("min"))
                     {
                         timeStringSplit = timeOfStep.split("\\s+"); //split along whitespace
                         minutesAtStep = (Integer.parseInt(timeStringSplit[0]) * 60) + Integer.parseInt(timeStringSplit[2]);
@@ -139,8 +139,8 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                     //So for that location, we'll send a weather API call to fetch the weather at that location at that time.
                     //The weather data itself isn't very flexible for time, so we'll just need to do some interval comparisons
                     //there too.
-                    if (runningDurationSum >= 50 && runningDurationSum <= 500)
-                    {
+                    //if (runningDurationSum >= 30)
+                    //{
                         JSONObject currentLatLngObj = individualStep.getJSONObject("end_location");
                         objectToSend = new LatLng(currentLatLngObj.getDouble("lat"), currentLatLngObj.getDouble("lng"));
                         routeWeatherMarkerList.add(objectToSend);
@@ -209,9 +209,9 @@ public class AsyncDrawMapTask extends AsyncTask<Void, Void, JSONArray>
                             }
 
                             //Once we have our latlng -> weatherobj mapping, we reset the duration and continue the loop
-                            runningDurationSum = 0;
-                            continue;
-                        }
+                            //runningDurationSum = 0;
+                            //continue;
+                        //}
                     }
                 }
 

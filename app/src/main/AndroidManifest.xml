@@ -21,14 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayRouteCardsActivity" />
+        <activity android:name=".DisplayRouteCardsActivity" android:configChanges="orientation|screenSize"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -43,7 +43,10 @@
 
         <activity
             android:name=".SingleRouteMapActivity"
-            android:label="@string/title_activity_single_route_map"></activity>
+            android:label="@string/title_activity_single_route_map"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
     </application>
 
 </manifest>

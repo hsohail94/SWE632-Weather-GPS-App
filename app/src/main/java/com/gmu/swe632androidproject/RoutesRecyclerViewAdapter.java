@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -24,12 +26,14 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
     {
         private CardView routeCardView;
         private TextView distanceAndTime;
+        private TextView averageWeather;
 
         RouteViewHolder(View routeView)
         {
             super(routeView);
             routeCardView = (CardView) itemView.findViewById(R.id.routes_cardview);
             distanceAndTime = (TextView) itemView.findViewById(R.id.distance_and_time);
+            averageWeather = (TextView) itemView.findViewById(R.id.average_weather);
             routeView.setOnClickListener(this);
         }
 
@@ -63,6 +67,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
     {
         int actualPos = position + 1;
         holder.distanceAndTime.setText("Route " + actualPos + ": " + routes.get(position).getDistance() + ", " + routes.get(position).getTotalTime());
+        holder.averageWeather.setText("Most Common Type of Weather Along Route: " + routes.get(position).getAverageWeather());
     }
 
     @Override

@@ -9,6 +9,10 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -18,9 +22,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TimeZone;
 
@@ -251,6 +258,67 @@ public final class NetworkMethods
         cal = sdf.getCalendar();
 
         return cal;
+    }
+
+    /**
+     * This method will be used by the AsyncRouteCards class to determine the most common type of weather
+     * for a given route, using a latlng->jsonobject argument.
+     * @return
+     */
+    public static String getMostCommonTypeOfWeather(HashMap<LatLng,String> latLngStringHashMap)
+    {
+        HashMap<String,Integer> weatherDescriptionFrequencyMap = new HashMap<String, Integer>();
+        int i = 0;
+        for (LatLng latLng:  latLngStringHashMap.keySet())
+        {
+
+                String weatherMainDescription = latLngStringHashMap.get(latLng);
+                if (!weatherDescriptionFrequencyMap.containsKey(weatherMainDescription))
+                {
+                    weatherDescriptionFrequencyMap.put(weatherMainDescription, new Integer(0));
+                }
+                else
+                {
+                    Integer freq = weatherDescriptionFrequencyMap.get(weatherMainDescription);
+                    Integer newFreq = new Integer(freq.intValue()+1);
+                    weatherDescriptionFrequencyMap.put(weatherMainDescription,newFreq);
+                }
+
+        }
+
+        Integer integer = null;
+        for (String s: weatherDescriptionFrequencyMap.keySet())
+        {
+            Integer freq = weatherDescriptionFrequencyMap.get(s);
+            if (integer == null || freq.compareTo(integer) > 0)
+            {
+                integer = freq;
+            }
+        }
+        String mostCommon = getKeyByValue(weatherDescriptionFrequencyMap, integer);
+        return mostCommon;
+
+    }
+
+    /**
+     * A generic method for finding a key in a map given the value it's mapped to.
+     *
+     * @param map
+     * @param value
+     * @param <T>
+     * @param <E>
+     * @return
+     */
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value)
+    {
+        for (Map.Entry<T, E> entry : map.entrySet())
+        {
+            if (value.equals(entry.getValue()))
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
 }

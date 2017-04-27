@@ -12,6 +12,8 @@ import android.view.View;
 
 //import com.github.pwittchen.weathericonview.WeatherIconView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 
 import java.net.URL;

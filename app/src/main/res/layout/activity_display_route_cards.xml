@@ -32,7 +32,6 @@
                 android:id="@+id/average_weather"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/blackTest"
-                android:text="this is a weather test"
                 android:layout_below="@id/distance_and_time"
                 android:textSize="15sp"/>
 
