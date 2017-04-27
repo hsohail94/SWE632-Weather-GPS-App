@@ -1,14 +1,20 @@
 package com.gmu.swe632androidproject;
 
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,6 +49,42 @@ public class MainActivity extends AppCompatActivity
         setPreferencesDrawerToggle();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        sourceText = (EditText) findViewById(R.id.source_text);
+        destinationText = (EditText) findViewById(R.id.destination_text);
+        /*
+        sourceAndDestSearch = (android.widget.SearchView) findViewById(R.id.source_and_destination_search);
+
+        sourceAndDestSearch.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                String[] userSourceAndDestination = s.split("and");
+                String source = userSourceAndDestination[0];
+                String destination = userSourceAndDestination[1];
+
+                //Handling input incase either source or destination fields are empty or null
+                if (source.replaceAll("\\s+","").equals("") || destination.replaceAll("\\s+","").equals(""))
+                {
+                    Toast.makeText(MainActivity.this, "Please enter a source, destination, or both!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    //Pass data to new class, and start it when button is clicked
+                    Intent i = new Intent(sourceAndDestSearch.getContext(), DisplayRouteCardsActivity.class);
+                    i.setAction(Intent.ACTION_SEARCH);
+                    i.putExtra(SearchManager.QUERY, s);
+                    startActivity(i);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });*/
+
     }
 
     /**
@@ -56,8 +98,14 @@ public class MainActivity extends AppCompatActivity
         sourceText = (EditText) findViewById(R.id.source_text);
         destinationText = (EditText) findViewById(R.id.destination_text);
 
+        //sourceText = (android.widget.SearchView) findViewById(R.id.source_text);
+       // destinationText = (android.widget.SearchView) findViewById(R.id.destination_text);
+
         String source = sourceText.getText().toString();
         String destination = destinationText.getText().toString();
+
+        //String source = sourceText.getQuery().toString();
+        //String destination = destinationText.getQuery().toString();
 
         //Handling input incase either source or destination fields are empty or null
         if (source.replaceAll("\\s+","").equals("") || destination.replaceAll("\\s+","").equals(""))
@@ -68,6 +116,7 @@ public class MainActivity extends AppCompatActivity
         {
             //Pass data to new class, and start it when button is clicked
             Intent i = new Intent(MainActivity.this, DisplayRouteCardsActivity.class);
+            i.setAction(Intent.ACTION_PICK_ACTIVITY);
             i.putExtra("source location", source);
             i.putExtra("destination address", destination);
             startActivity(i);

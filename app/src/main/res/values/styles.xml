@@ -10,8 +10,13 @@
 
     <!-- Used for material button design -->
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/redButton</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="CustomSearchView"
+        parent="@android:style/Widget.Material.Light">
+        <item name="android:textColorHint">#CCCCCC</item>
     </style>
 
 </resources>

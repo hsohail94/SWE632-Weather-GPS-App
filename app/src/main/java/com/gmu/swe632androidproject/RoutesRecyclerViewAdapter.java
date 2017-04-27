@@ -2,6 +2,7 @@ package com.gmu.swe632androidproject;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
             routeCardView = (CardView) itemView.findViewById(R.id.routes_cardview);
             distanceAndTime = (TextView) itemView.findViewById(R.id.distance_and_time);
             averageWeather = (TextView) itemView.findViewById(R.id.average_weather);
+
             routeView.setOnClickListener(this);
         }
 
