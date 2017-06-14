@@ -21,6 +21,8 @@ OpenWeatherMaps API
 
 ## Developers
 
-Haaris Sohail \n
-Manpriya Dua \n
+Haaris Sohail
+
+Manpriya Dua
+
 Pooja Reddy
