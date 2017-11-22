@@ -23,6 +23,3 @@ OpenWeatherMaps API
 
 Haaris Sohail
 
-Manpriya Dua
-
-Pooja Reddy
