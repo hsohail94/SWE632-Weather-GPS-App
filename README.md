@@ -16,7 +16,10 @@ VM or phone running Android 5.0 or higher.
 
 ## APIs Used
 
-Google Maps Directions API
+Google Maps 
+
+Directions API
+
 OpenWeatherMaps API
 
 ## Developers
